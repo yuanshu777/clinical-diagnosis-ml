@@ -1,0 +1,18 @@
+﻿# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Generated output files
+sub_predictions*.csv
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
