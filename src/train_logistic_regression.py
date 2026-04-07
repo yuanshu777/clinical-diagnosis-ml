@@ -1,4 +1,5 @@
-import pandas as pd
+﻿import pandas as pd
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -6,9 +7,13 @@ from sklearn.metrics import classification_report, roc_auc_score, roc_curve, con
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+BASE_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = BASE_DIR / 'outputs'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load the train and test datasets
-train_df = pd.read_csv('train.csv')
-test_df = pd.read_csv('test.csv')
+train_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_train.csv')
+test_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_test.csv')
 
 # Drop unnecessary columns like 'PatientID' and 'DoctorInCharge'
 X = train_df.drop(columns=['PatientID', 'DoctorInCharge', 'Diagnosis'])
@@ -72,8 +77,10 @@ submission_df = pd.DataFrame({
     'PatientID': test_df['PatientID'],
     'Diagnosis': y_test_pred
 })
-submission_df.to_csv('sub_predictions.csv', index=False)
+submission_path = OUTPUT_DIR / 'sub_predictions_logistic.csv'
+submission_df.to_csv(submission_path, index=False)
 
-print("Predictions saved to 'sub_predictions.csv'.")
+print(f"Predictions saved to '{submission_path}'.")
+
 
 

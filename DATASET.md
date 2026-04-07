@@ -1,9 +1,9 @@
 ﻿# Dataset Documentation
 
 ## Files
-- `train.csv`: 1,504 labeled rows
-- `test.csv`: 645 unlabeled rows
-- `test_predictions.csv`: generated predictions
+- `data/alzheimers_train.csv`: 1,504 labeled rows
+- `data/alzheimers_test.csv`: 645 unlabeled rows
+- `outputs/alzheimers_test_predictions_legacy.csv`: legacy generated predictions
 
 ## Target
 - `Diagnosis`

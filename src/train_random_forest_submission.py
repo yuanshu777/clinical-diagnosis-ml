@@ -1,4 +1,5 @@
-import pandas as pd
+﻿import pandas as pd
+from pathlib import Path
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -7,9 +8,13 @@ from sklearn.feature_selection import SelectKBest, f_classif
 import matplotlib.pyplot as plt
 import numpy as np
 
+BASE_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = BASE_DIR / 'outputs'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load the datasets
-train_df = pd.read_csv('train.csv')
-test_df = pd.read_csv('test.csv')
+train_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_train.csv')
+test_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_test.csv')
 
 # Drop unnecessary columns in train and test datasets
 X = train_df.drop(columns=['PatientID', 'DoctorInCharge', 'Diagnosis'])
@@ -57,8 +62,9 @@ submission_df = pd.DataFrame({
     'PatientID': test_df['PatientID'],
     'Diagnosis': y_test_pred
 })
-submission_df.to_csv('sub_predictions.csv', index=False)
-print("Predictions saved to 'sub_predictions.csv'.")
+submission_path = OUTPUT_DIR / 'sub_predictions_random_forest.csv'
+submission_df.to_csv(submission_path, index=False)
+print(f"Predictions saved to '{submission_path}'.")
 
 # Retrieve feature importances and selected feature names
 feature_importances = best_rf_model.feature_importances_
@@ -97,3 +103,5 @@ plt.legend(loc='lower right')
 plt.grid(alpha=0.3)
 plt.tight_layout()
 plt.show()
+
+

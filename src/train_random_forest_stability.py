@@ -1,5 +1,6 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -12,9 +13,13 @@ from sklearn.metrics import (
 from sklearn.feature_selection import SelectKBest, f_classif
 import matplotlib.pyplot as plt
 
+BASE_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = BASE_DIR / 'outputs'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load the datasets
-train_df = pd.read_csv('train.csv')
-test_df = pd.read_csv('test.csv')
+train_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_train.csv')
+test_df = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_test.csv')
 
 # Prepare datasets
 X = train_df.drop(columns=['PatientID', 'DoctorInCharge', 'Diagnosis'])
@@ -94,8 +99,8 @@ def test_model_stability(X, y, n_iterations=10):
 
     # Analyze results
     print("\nPerformance Stability Results:")
-    print(f"Accuracy: mean={np.mean(accuracies):.3f} ± {np.std(accuracies):.3f}")
-    print(f"AUC Score: mean={np.mean(auc_scores):.3f} ± {np.std(auc_scores):.3f}")
+    print(f"Accuracy: mean={np.mean(accuracies):.3f} Â± {np.std(accuracies):.3f}")
+    print(f"AUC Score: mean={np.mean(auc_scores):.3f} Â± {np.std(auc_scores):.3f}")
 
     return np.array(feature_importances_matrix)
 
@@ -177,8 +182,9 @@ submission_df = pd.DataFrame({
     'PatientID': test_df['PatientID'],
     'Diagnosis': y_test_pred
 })
-submission_df.to_csv('sub_predictions8.csv', index=False)
-print("\nPredictions saved to 'sub_predictions.csv'")
+submission_path = OUTPUT_DIR / 'sub_predictions_random_forest_stability.csv'
+submission_df.to_csv(submission_path, index=False)
+print(f"\nPredictions saved to '{submission_path}'")
 
 # Create feature importance visualization
 feature_importances = rf_model.feature_importances_
@@ -210,3 +216,5 @@ plt.legend(loc='lower right')
 plt.grid(alpha=0.3)
 plt.tight_layout()
 plt.show()
+
+

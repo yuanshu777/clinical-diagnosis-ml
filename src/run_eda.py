@@ -1,10 +1,15 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+OUTPUT_DIR = BASE_DIR / 'outputs' / 'eda'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # First, load your data
-train_data = pd.read_csv('train.csv')
+train_data = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_train.csv')
 
 
 # Let's organize all our analysis functions in a class for better structure
@@ -95,7 +100,7 @@ class AlzheimerDataAnalyzer:
 
         # Adjust layout to prevent overlap
         plt.tight_layout()
-        plt.savefig("demographics_analysis.png", dpi=300, bbox_inches="tight")
+        plt.savefig(OUTPUT_DIR / "demographics_analysis.png", dpi=300, bbox_inches="tight")
         plt.show()
     def analyze_clinical_measurements(self):
         """
@@ -113,7 +118,7 @@ class AlzheimerDataAnalyzer:
             plt.xticks(rotation=45)
             plt.title(f'{var} by Diagnosis')
         plt.tight_layout()
-        plt.savefig("clinical_measurements.png", dpi=300, bbox_inches="tight")
+        plt.savefig(OUTPUT_DIR / "clinical_measurements.png", dpi=300, bbox_inches="tight")
         plt.show()
 
     def analyze_cognitive_functional(self):
@@ -131,7 +136,7 @@ class AlzheimerDataAnalyzer:
             plt.xticks(rotation=45)
             plt.title(f'{var} Distribution')
         plt.tight_layout()
-        plt.savefig("cognitive_functional.png", dpi=300, bbox_inches="tight")
+        plt.savefig(OUTPUT_DIR / "cognitive_functional.png", dpi=300, bbox_inches="tight")
         plt.show()
 
     def correlation_analysis(self):
@@ -146,7 +151,7 @@ class AlzheimerDataAnalyzer:
         sns.heatmap(correlations, annot=True, cmap='coolwarm', center=0)
         plt.title('Feature Correlations')
         plt.tight_layout()
-        plt.savefig("correlation_analysis.png", dpi=300, bbox_inches="tight")
+        plt.savefig(OUTPUT_DIR / "correlation_analysis.png", dpi=300, bbox_inches="tight")
         plt.show()
 
 
@@ -154,7 +159,7 @@ class AlzheimerDataAnalyzer:
 def main():
     # Load the data
     print("Loading data...")
-    train_data = pd.read_csv('train.csv')
+    train_data = pd.read_csv(BASE_DIR / 'data' / 'alzheimers_train.csv')
 
     # Create analyzer object
     analyzer = AlzheimerDataAnalyzer(train_data)
@@ -170,3 +175,5 @@ def main():
 # Run the analysis
 if __name__ == "__main__":
     main()
+
+
